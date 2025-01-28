@@ -1,0 +1,220 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """Name of the user"""
+  name: String!
+
+  """Email address of the user (unique)"""
+  email: String!
+
+  """Hashed password of the user"""
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Auth {
+  """User logged in"""
+  user: User!
+
+  """Session access token"""
+  accessToken: String!
+}
+
+type CostCenter {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """Auto-incremented sequence number"""
+  sequence: Float!
+
+  """Cost center name"""
+  name: String!
+
+  """Optional description of the cost center"""
+  description: String
+
+  """ID of the parent cost center"""
+  fatherId: String
+}
+
+type DreClass {
+  id: ID!
+  name: String!
+}
+
+type FlowClass {
+  id: ID!
+  name: String!
+}
+
+type Category {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """Autoincrement sequence"""
+  sequence: Float!
+
+  """Category name"""
+  name: String!
+
+  """Category description"""
+  description: String
+
+  """Category father id"""
+  fatherId: String
+
+  """Category type"""
+  type: CategoryTypeEnum!
+
+  """Category deductible"""
+  deductible: Boolean!
+
+  """User id"""
+  userId: String!
+
+  """Flow class"""
+  flowClass: FlowClass!
+
+  """Dre class"""
+  dreClass: DreClass!
+}
+
+"""Category type"""
+enum CategoryTypeEnum {
+  RECEIPT
+  FIXED_EXPENSE
+  VARIABLE_EXPENSE
+}
+
+type Query {
+  getUsers: [User!]!
+  getUser(id: String!): User!
+  getCurrentUser: User!
+  getCostCenter(id: String!): CostCenter!
+  getCostCenters: [CostCenter!]!
+  getCategory(id: String!): Category!
+  getCategories: [Category!]!
+}
+
+type Mutation {
+  signIn(signInInput: SignInPayload!): Auth!
+  createUser(data: CreateUserInput!): User!
+  updateUser(data: UpdateUserInput!): User!
+  deleteUser(id: String!): User!
+  createCostCenter(data: CreateCostCenterInput!): CostCenter!
+  updateCostCenter(data: UpdateCostCenterInput!): CostCenter!
+  deleteCostCenter(id: String!): CostCenter!
+  createCategory(data: CreateCategoryInput!): Category!
+  updateCategory(data: UpdateCategoryInput!): Category!
+  deleteCategory(id: String!): Category!
+}
+
+input SignInPayload {
+  """User e-mail"""
+  email: String!
+
+  """User password"""
+  normalizedPassword: String!
+}
+
+input CreateUserInput {
+  """Name of the user"""
+  name: String!
+
+  """Email address of the user (unique)"""
+  email: String!
+
+  """Password of the user"""
+  password: String!
+}
+
+input UpdateUserInput {
+  """Name of the user"""
+  name: String
+
+  """Email address of the user (unique)"""
+  email: String
+
+  """Password of the user"""
+  password: String
+
+  """ID of the user to update"""
+  id: String!
+}
+
+input CreateCostCenterInput {
+  """Cost center name"""
+  name: String!
+
+  """Optional description of the cost center"""
+  description: String
+
+  """ID of the parent cost center"""
+  fatherId: String
+}
+
+input UpdateCostCenterInput {
+  """Cost center ID"""
+  id: String!
+}
+
+input CreateCategoryInput {
+  """Category name"""
+  name: String!
+
+  """Category description"""
+  description: String
+
+  """Category father id"""
+  fatherId: String
+
+  """Category type"""
+  type: CategoryTypeEnum!
+
+  """Category deductible"""
+  deductible: Boolean!
+
+  """Flow class ID"""
+  flowClassId: ID!
+
+  """DRE class ID"""
+  dreClassId: ID!
+}
+
+input UpdateCategoryInput {
+  """Category name"""
+  name: String
+
+  """Category description"""
+  description: String
+
+  """Category father id"""
+  fatherId: String
+
+  """Category type"""
+  type: CategoryTypeEnum
+
+  """Category deductible"""
+  deductible: Boolean
+
+  """Flow class ID"""
+  flowClassId: ID
+
+  """DRE class ID"""
+  dreClassId: ID
+
+  """ID of the category to update"""
+  id: ID!
+}
