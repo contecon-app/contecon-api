@@ -9,7 +9,7 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateUserInput) {
-    const { name, email, password } = data;
+    const { name, email, password, authId } = data;
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -18,6 +18,7 @@ export class UserService {
         name,
         email,
         password: hashedPassword,
+        authId,
       },
     });
 
