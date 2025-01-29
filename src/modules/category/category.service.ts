@@ -7,7 +7,7 @@ import { UpdateCategoryInput } from './models/update-category-input.dto';
 export class CategoryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createCategory(userId: string, data: CreateCategoryInput) {
+  async create(userId: string, data: CreateCategoryInput) {
     const {
       name,
       description,
@@ -46,7 +46,7 @@ export class CategoryService {
     });
   }
 
-  async updateCategory(userId: string, data: UpdateCategoryInput) {
+  async update(userId: string, data: UpdateCategoryInput) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -61,7 +61,7 @@ export class CategoryService {
     });
   }
 
-  async deleteCategory(userId: string, id: string) {
+  async delete(userId: string, id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -75,7 +75,7 @@ export class CategoryService {
     });
   }
 
-  async getCategory(userId: string, id: string) {
+  async getById(userId: string, id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -89,7 +89,7 @@ export class CategoryService {
     });
   }
 
-  async getCategories(userId: string) {
+  async getAll(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
