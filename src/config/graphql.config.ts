@@ -12,6 +12,7 @@ export class GqlConfigService implements GqlOptionsFactory {
       autoSchemaFile: join(process.cwd(), 'src/shared/graphql/schema.gql'),
       playground: false,
       installSubscriptionHandlers: true,
+      introspection: true,
       context: (ctx) => {
         return ctx;
       },

@@ -13,13 +13,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRoleEnum {
+  ADMIN
+  USER
+  SUPER_ADMIN
+}
+
 model User {
   id String @id @default(uuid())
 
   name     String
-  email    String  @unique
+  email    String       @unique
   password String
-  authId   String? @unique
+  role     UserRoleEnum @default(USER)
 
   categories  Category[]
   costCenters CostCenter[]
