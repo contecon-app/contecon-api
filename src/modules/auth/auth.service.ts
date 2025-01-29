@@ -63,20 +63,4 @@ export class AuthService {
       user,
     };
   }
-
-  async signInWithAuthId(authId: string) {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        authId,
-      },
-    });
-
-    if (!user) {
-      throw new Error('User not exists!');
-    }
-
-    const { accessToken } = await this.generateToken(user);
-
-    return { accessToken, user };
-  }
 }

@@ -12,11 +12,4 @@ export class AuthResolver {
   async signIn(@Args('signInInput') signInInput: SignInPayload) {
     return await this.authService.signIn(signInInput);
   }
-
-  @Mutation(() => Auth)
-  async signInWithAuthId(
-    @Args('authId', { type: () => String }) authId: string,
-  ) {
-    return await this.authService.signInWithAuthId(authId);
-  }
 }
