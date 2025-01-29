@@ -123,13 +123,13 @@ enum CategoryTypeEnum {
 }
 
 type Query {
-  getUsers: [User!]!
-  getUser(id: String!): User!
+  getAllUsers: [User!]!
+  getUserById(id: String!): User!
   getCurrentUser: User!
-  getCostCenter(id: String!): CostCenter!
-  getCostCenters: [CostCenter!]!
-  getCategory(id: String!): Category!
-  getCategories: [Category!]!
+  getCostCenterById(id: String!): CostCenter!
+  getAllCostCenters: [CostCenter!]!
+  getCategoryById(id: String!): Category!
+  getAllCategories: [Category!]!
 }
 
 type Mutation {
