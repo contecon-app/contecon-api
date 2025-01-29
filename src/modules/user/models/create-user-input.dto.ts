@@ -10,4 +10,10 @@ export class CreateUserInput {
 
   @Field(() => String, { description: 'Password of the user' })
   password: string;
+
+  @Field(() => String, {
+    description: 'Auth ID of the user',
+    nullable: true,
+  })
+  authId?: string;
 }

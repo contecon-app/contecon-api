@@ -110,6 +110,7 @@ type Query {
 
 type Mutation {
   signIn(signInInput: SignInPayload!): Auth!
+  signInWithAuthId(authId: String!): Auth!
   createUser(data: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!): User!
   deleteUser(id: String!): User!
@@ -138,6 +139,9 @@ input CreateUserInput {
 
   """Password of the user"""
   password: String!
+
+  """Auth ID of the user"""
+  authId: String
 }
 
 input UpdateUserInput {
@@ -149,6 +153,9 @@ input UpdateUserInput {
 
   """Password of the user"""
   password: String
+
+  """Auth ID of the user"""
+  authId: String
 
   """ID of the user to update"""
   id: String!
