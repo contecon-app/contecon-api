@@ -18,7 +18,7 @@ export class CostCenterResolver {
     @Args('data') data: CreateCostCenterInput,
     @GetCurrentUser() user: CurrentUser,
   ) {
-    return this.costCenterService.createCostCenter(user.userId, data);
+    return this.costCenterService.create(user.userId, data);
   }
 
   @Mutation(() => CostCenter, { name: 'updateCostCenter' })
@@ -27,24 +27,24 @@ export class CostCenterResolver {
     @Args('data') data: UpdateCostCenterInput,
     @GetCurrentUser() user: CurrentUser,
   ) {
-    return this.costCenterService.updateCostCenter(user.userId, data);
+    return this.costCenterService.update(user.userId, data);
   }
 
   @Mutation(() => CostCenter, { name: 'deleteCostCenter' })
   @UseGuards(AuthGuard)
   delete(@Args('id') id: string, @GetCurrentUser() user: CurrentUser) {
-    return this.costCenterService.deleteCostCenter(user.userId, id);
+    return this.costCenterService.delete(user.userId, id);
   }
 
-  @Query(() => CostCenter, { name: 'getCostCenter' })
+  @Query(() => CostCenter, { name: 'getCostCenterById' })
   @UseGuards(AuthGuard)
   get(@Args('id') id: string, @GetCurrentUser() user: CurrentUser) {
-    return this.costCenterService.getCostCenter(user.userId, id);
+    return this.costCenterService.getAll(user.userId, id);
   }
 
-  @Query(() => [CostCenter], { name: 'getCostCenters' })
+  @Query(() => [CostCenter], { name: 'getAllCostCenters' })
   @UseGuards(AuthGuard)
   getMany(@GetCurrentUser() user: CurrentUser) {
-    return this.costCenterService.getCostCenters(user.userId);
+    return this.costCenterService.getById(user.userId);
   }
 }

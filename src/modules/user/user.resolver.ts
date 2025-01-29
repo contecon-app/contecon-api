@@ -12,14 +12,14 @@ import { CurrentUser } from 'src/common/types/current-user.entity';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(() => [User], { name: 'getUsers' })
+  @Query(() => [User], { name: 'getAllUsers' })
   async getAll() {
     return this.userService.getAll();
   }
 
-  @Query(() => User, { name: 'getUser' })
+  @Query(() => User, { name: 'getUserById' })
   async getOne(@Args('id') id: string) {
-    return this.userService.getOne(id);
+    return this.userService.getById(id);
   }
 
   @Mutation(() => User, { name: 'createUser' })

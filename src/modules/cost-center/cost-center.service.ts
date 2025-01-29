@@ -7,7 +7,7 @@ import { UpdateCostCenterInput } from './models/update-cost-center-input.dto';
 export class CostCenterService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createCostCenter(userId: string, data: CreateCostCenterInput) {
+  async create(userId: string, data: CreateCostCenterInput) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -26,7 +26,7 @@ export class CostCenterService {
     });
   }
 
-  async updateCostCenter(userId: string, data: UpdateCostCenterInput) {
+  async update(userId: string, data: UpdateCostCenterInput) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -41,7 +41,7 @@ export class CostCenterService {
     });
   }
 
-  async deleteCostCenter(userId: string, id: string) {
+  async delete(userId: string, id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -55,7 +55,7 @@ export class CostCenterService {
     });
   }
 
-  async getCostCenter(userId: string, id: string) {
+  async getAll(userId: string, id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -69,7 +69,7 @@ export class CostCenterService {
     });
   }
 
-  async getCostCenters(userId: string) {
+  async getById(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });

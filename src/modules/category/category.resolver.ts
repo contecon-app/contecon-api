@@ -18,7 +18,7 @@ export class CategoryResolver {
     @Args('data') data: CreateCategoryInput,
     @GetCurrentUser() user: CurrentUser,
   ) {
-    return this.categoryService.createCategory(user.userId, data);
+    return this.categoryService.create(user.userId, data);
   }
 
   @Mutation(() => Category, { name: 'updateCategory' })
@@ -27,24 +27,24 @@ export class CategoryResolver {
     @Args('data') data: UpdateCategoryInput,
     @GetCurrentUser() user: CurrentUser,
   ) {
-    return this.categoryService.updateCategory(user.userId, data);
+    return this.categoryService.update(user.userId, data);
   }
 
   @Mutation(() => Category, { name: 'deleteCategory' })
   @UseGuards(AuthGuard)
   delete(@Args('id') id: string, @GetCurrentUser() user: CurrentUser) {
-    return this.categoryService.deleteCategory(user.userId, id);
+    return this.categoryService.delete(user.userId, id);
   }
 
-  @Query(() => Category, { name: 'getCategory' })
+  @Query(() => Category, { name: 'getCategoryById' })
   @UseGuards(AuthGuard)
   get(@Args('id') id: string, @GetCurrentUser() user: CurrentUser) {
-    return this.categoryService.getCategory(user.userId, id);
+    return this.categoryService.getById(user.userId, id);
   }
 
-  @Query(() => [Category], { name: 'getCategories' })
+  @Query(() => [Category], { name: 'getAllCategories' })
   @UseGuards(AuthGuard)
   getMany(@GetCurrentUser() user: CurrentUser) {
-    return this.categoryService.getCategories(user.userId);
+    return this.categoryService.getAll(user.userId);
   }
 }
