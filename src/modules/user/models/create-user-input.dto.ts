@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, ID, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateUserInput {
@@ -11,9 +11,6 @@ export class CreateUserInput {
   @Field(() => String, { description: 'Password of the user' })
   password: string;
 
-  @Field(() => String, {
-    description: 'Auth ID of the user',
-    nullable: true,
-  })
-  authId?: string;
+  @Field(() => ID, { description: 'Role ID of the user' })
+  roleId?: string;
 }

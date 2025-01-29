@@ -9,7 +9,7 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateUserInput) {
-    const { name, email, password, authId } = data;
+    const { name, email, password, roleId } = data;
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -18,7 +18,11 @@ export class UserService {
         name,
         email,
         password: hashedPassword,
-        authId,
+        role: {
+          connect: {
+            id: roleId,
+          },
+        },
       },
     });
 
@@ -26,13 +30,18 @@ export class UserService {
   }
 
   async update(data: UpdateUserInput) {
-    const { id, name, email } = data;
+    const { id, name, email, roleId } = data;
 
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: {
         name,
         email,
+        role: {
+          connect: {
+            id: roleId,
+          },
+        },
       },
     });
 
