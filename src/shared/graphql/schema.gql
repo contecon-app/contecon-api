@@ -395,7 +395,7 @@ type Query {
   getAllBeneficiaries: [Beneficiary!]!
   getBeneficiaryById(id: String!): Beneficiary!
   getFinancialAccountById(id: String!): FinancialAccount!
-  getFinancialAccounts: [FinancialAccount!]!
+  getAllFinancialAccounts: [FinancialAccount!]!
   getAllRecurrences: [Recurrence!]!
   getRecurrenceById(id: String!): Recurrence!
 }

@@ -33,7 +33,7 @@ export class FinancialAccountResolver {
     return this.financialAccountService.getById(id);
   }
 
-  @Query(() => [FinancialAccount], { name: 'getFinancialAccounts' })
+  @Query(() => [FinancialAccount], { name: 'getAllFinancialAccounts' })
   async getAll() {
     return this.financialAccountService.getAll();
   }
