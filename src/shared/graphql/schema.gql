@@ -122,6 +122,262 @@ enum CategoryTypeEnum {
   VARIABLE_EXPENSE
 }
 
+type Inflow {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """Inflow name"""
+  name: String!
+
+  """Inflow description"""
+  description: String
+
+  """Beneficiary ID"""
+  beneficiaryId: ID!
+
+  """Financial account ID"""
+  financialAccountId: ID!
+
+  """Expiration date"""
+  expirationDate: DateTime!
+
+  """Value"""
+  value: Float!
+
+  """Compensation"""
+  compensation: Float!
+
+  """Is compensated"""
+  isCompensated: Boolean!
+
+  """Category ID"""
+  categoryId: ID!
+
+  """User ID"""
+  userId: ID!
+
+  """Cost center ID"""
+  costCenterId: ID!
+
+  """Emission date"""
+  emissionDate: DateTime!
+
+  """Compensation type"""
+  compesationType: CompensationTypeEnum!
+
+  """Installment number"""
+  installmentNumber: Float!
+
+  """Installment value"""
+  installmentValue: Float!
+}
+
+"""Compensation type enum"""
+enum CompensationTypeEnum {
+  FIXED
+  AUTOMATIC
+}
+
+type Beneficiary {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """Beneficiary name"""
+  name: String!
+
+  """Beneficiary document"""
+  document: String!
+
+  """Document type"""
+  documentType: DocumentTypeEnum!
+
+  """Beneficiary type"""
+  type: BeneficiaryTypeEnum!
+
+  """Beneficiary email"""
+  email: String!
+
+  """Beneficiary phone"""
+  phone: String!
+
+  """Beneficiary address"""
+  address: String!
+
+  """Beneficiary city"""
+  city: String!
+
+  """Beneficiary state"""
+  state: String!
+
+  """Beneficiary zip code"""
+  zipCode: String!
+
+  """Beneficiary description"""
+  description: String
+}
+
+"""Document type enum"""
+enum DocumentTypeEnum {
+  CPF
+  CNPJ
+}
+
+"""Beneficiary type enum"""
+enum BeneficiaryTypeEnum {
+  CUSTOMER
+  SUPPLIER
+  CUSTOMER_SUPPLIER
+}
+
+type Responsible {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """Responsible name"""
+  name: String!
+
+  """Phone number"""
+  phone: String!
+
+  """Email address"""
+  email: String!
+
+  """Document number"""
+  document: String!
+
+  """Document type"""
+  documentType: DocumentTypeEnum!
+}
+
+type FinancialAccount {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """Account name"""
+  name: String!
+
+  """Phone number"""
+  phone: String!
+
+  """Email address"""
+  email: String!
+
+  """Account description"""
+  description: String
+
+  """Tax free status"""
+  taxFree: Boolean!
+
+  """Initial balance"""
+  initialBalance: Float!
+
+  """Credit limit"""
+  creditLimit: Float!
+
+  """Used credit limit"""
+  usedCreditLimit: Float!
+
+  """Wallet information"""
+  wallet: String
+
+  """Variation information"""
+  variation: String
+
+  """Contract information"""
+  contract: String
+
+  """Emission cost"""
+  emissionCost: String
+
+  """Emission compensation"""
+  emissionCompensation: String
+
+  """Monthly compensation"""
+  monthlyCompensation: String
+
+  """Monthly interest"""
+  monthlyInterest: String
+
+  """Monthly fine"""
+  monthlyFine: String
+
+  """Responsible entity"""
+  responsible: Responsible
+}
+
+type PaymentDocument {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """Payment document name"""
+  name: String!
+}
+
+type Recurrence {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """Recurrence name"""
+  name: String!
+
+  """Recurrence description"""
+  description: String
+
+  """Recurrence value"""
+  value: Float!
+
+  """Recurrence percentage"""
+  percentage: Float!
+
+  """Start date"""
+  startDate: DateTime!
+
+  """End date"""
+  endDate: DateTime!
+
+  """Payment document ID"""
+  paymentDocumentId: String
+
+  """Payment document"""
+  paymentDocument: PaymentDocument
+
+  """Recurrence type"""
+  recurrenceType: RecurrenceTypeEnum
+
+  """User"""
+  user: User!
+
+  """Category"""
+  category: Category!
+
+  """Cost center"""
+  costCenter: CostCenter!
+
+  """Financial account"""
+  financialAccount: FinancialAccount!
+
+  """Beneficiary"""
+  beneficiary: Beneficiary!
+}
+
+"""Recurrence type enum"""
+enum RecurrenceTypeEnum {
+  FIXED
+  CUSTOM
+  WEEKLY
+  BI_WEEKLY
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUAL
+  ANNUAL
+}
+
 type Query {
   getAllUsers: [User!]!
   getUserById(id: String!): User!
@@ -130,10 +386,23 @@ type Query {
   getAllCostCenters: [CostCenter!]!
   getCategoryById(id: String!): Category!
   getAllCategories: [Category!]!
+  getPermissionById(id: String!): Permission!
+  getAllPermissions: [Permission!]!
+  getAllRoles: [Role!]!
+  getRoleById(id: String!): Role!
+  getInflowById(id: String!): Inflow!
+  getAllInflows: [Inflow!]!
+  getAllBeneficiaries: [Beneficiary!]!
+  getBeneficiaryById(id: String!): Beneficiary!
+  getFinancialAccountById(id: String!): FinancialAccount!
+  getFinancialAccounts: [FinancialAccount!]!
+  getAllRecurrences: [Recurrence!]!
+  getRecurrenceById(id: String!): Recurrence!
 }
 
 type Mutation {
   signIn(signInInput: SignInPayload!): Auth!
+  signInWithId(id: String!): Auth!
   createUser(data: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!): User!
   deleteUser(id: String!): User!
@@ -143,6 +412,24 @@ type Mutation {
   createCategory(data: CreateCategoryInput!): Category!
   updateCategory(data: UpdateCategoryInput!): Category!
   deleteCategory(id: String!): Category!
+  createPermission(data: CreatePermissionInputDto!): Permission!
+  updatePermission(data: UpdatePermissionInputDto!): Permission!
+  deletePermission(id: String!): Permission!
+  createRole(data: CreateRoleInputDto!): Role!
+  updateRole(data: UpdateRoleInputDto!): Role!
+  deleteRole(id: String!): Role!
+  createInflow(data: CreateInflowInput!): Inflow!
+  updateInflow(data: UpdateInflowInput!): Inflow!
+  deleteInflow(id: String!): Inflow!
+  createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
+  updateBeneficiary(data: UpdateBeneficiaryInput!): Beneficiary!
+  deleteBeneficiary(id: String!): Beneficiary!
+  createFinancialAccount(data: CreateFinancialAccountInput!): FinancialAccount!
+  updateFinancialAccount(id: String!, data: UpdateFinancialAccountInput!): FinancialAccount!
+  deleteFinancialAccount(id: String!): FinancialAccount!
+  createRecurrence(data: CreateRecurrenceInput!): Recurrence!
+  updateRecurrence(data: UpdateRecurrenceInput!): Recurrence!
+  deleteRecurrence(id: String!): Recurrence!
 }
 
 input SignInPayload {
@@ -246,5 +533,448 @@ input UpdateCategoryInput {
   dreClassId: ID
 
   """ID of the category to update"""
+  id: ID!
+}
+
+input CreatePermissionInputDto {
+  """The name of the permission"""
+  name: String!
+}
+
+input UpdatePermissionInputDto {
+  """The name of the permission"""
+  name: String
+
+  """The id of the permission"""
+  id: String!
+}
+
+input CreateRoleInputDto {
+  """The name of the role"""
+  name: String!
+
+  """The permissions of the role"""
+  permissionsId: [ID!]!
+}
+
+input UpdateRoleInputDto {
+  """The name of the role"""
+  name: String
+
+  """The permissions of the role"""
+  permissionsId: [ID!]
+
+  """The id of the role"""
+  id: ID!
+}
+
+input CreateInflowInput {
+  """Inflow name"""
+  name: String!
+
+  """Inflow description"""
+  description: String
+
+  """Beneficiary ID"""
+  beneficiaryId: String!
+
+  """Financial account ID"""
+  financialAccountId: String!
+
+  """Expiration date"""
+  expirationDate: DateTime!
+
+  """Value"""
+  value: Float!
+
+  """Compensation"""
+  compensation: Float!
+
+  """Category ID"""
+  categoryId: String!
+
+  """Cost center ID"""
+  costCenterId: String!
+
+  """Emission date"""
+  emissionDate: DateTime!
+
+  """Compensation type"""
+  compesationType: CompensationTypeEnum!
+
+  """Installment number"""
+  installmentNumber: Float! = 1
+
+  """Installment value"""
+  installmentValue: Float! = 0
+}
+
+input UpdateInflowInput {
+  """Inflow name"""
+  name: String
+
+  """Inflow description"""
+  description: String
+
+  """Beneficiary ID"""
+  beneficiaryId: String
+
+  """Financial account ID"""
+  financialAccountId: String
+
+  """Expiration date"""
+  expirationDate: DateTime
+
+  """Value"""
+  value: Float
+
+  """Compensation"""
+  compensation: Float
+
+  """Category ID"""
+  categoryId: String
+
+  """Cost center ID"""
+  costCenterId: String
+
+  """Emission date"""
+  emissionDate: DateTime
+
+  """Compensation type"""
+  compesationType: CompensationTypeEnum
+
+  """Installment number"""
+  installmentNumber: Float = 1
+
+  """Installment value"""
+  installmentValue: Float = 0
+
+  """Inflow ID"""
+  id: ID!
+}
+
+input CreateBeneficiaryInput {
+  """Beneficiary name"""
+  name: String!
+
+  """Beneficiary document"""
+  document: String!
+
+  """Document type"""
+  documentType: DocumentTypeEnum!
+
+  """Beneficiary type"""
+  type: BeneficiaryTypeEnum!
+
+  """Beneficiary email"""
+  email: String!
+
+  """Beneficiary phone"""
+  phone: String!
+
+  """Beneficiary address"""
+  address: String!
+
+  """Beneficiary city"""
+  city: String!
+
+  """Beneficiary state"""
+  state: String!
+
+  """Beneficiary zip code"""
+  zipCode: String!
+
+  """Beneficiary description"""
+  description: String
+
+  """Beneficiary category id"""
+  categoryId: ID
+
+  """Beneficiary cost center id"""
+  costCenterId: ID
+
+  """Beneficiary bank id"""
+  bankId: ID
+}
+
+input UpdateBeneficiaryInput {
+  """Beneficiary name"""
+  name: String
+
+  """Beneficiary document"""
+  document: String
+
+  """Document type"""
+  documentType: DocumentTypeEnum
+
+  """Beneficiary type"""
+  type: BeneficiaryTypeEnum
+
+  """Beneficiary email"""
+  email: String
+
+  """Beneficiary phone"""
+  phone: String
+
+  """Beneficiary address"""
+  address: String
+
+  """Beneficiary city"""
+  city: String
+
+  """Beneficiary state"""
+  state: String
+
+  """Beneficiary zip code"""
+  zipCode: String
+
+  """Beneficiary description"""
+  description: String
+
+  """Beneficiary category id"""
+  categoryId: ID
+
+  """Beneficiary cost center id"""
+  costCenterId: ID
+
+  """Beneficiary bank id"""
+  bankId: ID
+
+  """ID of the Beneficiary"""
+  id: ID!
+}
+
+input CreateFinancialAccountInput {
+  """Bank name"""
+  bankName: String!
+
+  """Bank agency"""
+  agency: String!
+
+  """Bank account"""
+  account: String!
+
+  """Bank type"""
+  type: BankTypeEnum!
+
+  """Account name"""
+  name: String!
+
+  """Phone number"""
+  phone: String!
+
+  """Email address"""
+  email: String!
+
+  """Account description"""
+  description: String
+
+  """Tax free status"""
+  taxFree: Boolean!
+
+  """Initial balance"""
+  initialBalance: Float!
+
+  """Credit limit"""
+  creditLimit: Float!
+
+  """Used credit limit"""
+  usedCreditLimit: Float!
+
+  """Wallet information"""
+  wallet: String
+
+  """Variation information"""
+  variation: String
+
+  """Contract information"""
+  contract: String
+
+  """Emission cost"""
+  emissionCost: String
+
+  """Emission compensation"""
+  emissionCompensation: String
+
+  """Monthly compensation"""
+  monthlyCompensation: String
+
+  """Monthly interest"""
+  monthlyInterest: String
+
+  """Monthly fine"""
+  monthlyFine: String
+
+  """Responsible entity"""
+  responsible: CreateResponsibleInput!
+}
+
+"""Bank type"""
+enum BankTypeEnum {
+  CURRENT
+  SAVINGS
+}
+
+input CreateResponsibleInput {
+  """Responsible name"""
+  name: String!
+
+  """Phone number"""
+  phone: String!
+
+  """Email address"""
+  email: String!
+
+  """Document number"""
+  document: String!
+
+  """Document type"""
+  documentType: DocumentTypeEnum!
+}
+
+input UpdateFinancialAccountInput {
+  """Bank name"""
+  bankName: String
+
+  """Bank agency"""
+  agency: String
+
+  """Bank account"""
+  account: String
+
+  """Bank type"""
+  type: BankTypeEnum
+
+  """Account name"""
+  name: String
+
+  """Phone number"""
+  phone: String
+
+  """Email address"""
+  email: String
+
+  """Account description"""
+  description: String
+
+  """Tax free status"""
+  taxFree: Boolean
+
+  """Initial balance"""
+  initialBalance: Float
+
+  """Credit limit"""
+  creditLimit: Float
+
+  """Used credit limit"""
+  usedCreditLimit: Float
+
+  """Wallet information"""
+  wallet: String
+
+  """Variation information"""
+  variation: String
+
+  """Contract information"""
+  contract: String
+
+  """Emission cost"""
+  emissionCost: String
+
+  """Emission compensation"""
+  emissionCompensation: String
+
+  """Monthly compensation"""
+  monthlyCompensation: String
+
+  """Monthly interest"""
+  monthlyInterest: String
+
+  """Monthly fine"""
+  monthlyFine: String
+
+  """Responsible entity"""
+  responsible: CreateResponsibleInput
+
+  """Financial account id"""
+  id: ID!
+}
+
+input CreateRecurrenceInput {
+  """Recurrence name"""
+  name: String!
+
+  """Recurrence description"""
+  description: String
+
+  """Recurrence value"""
+  value: Float!
+
+  """Recurrence percentage"""
+  percentage: Float!
+
+  """Start date"""
+  startDate: DateTime!
+
+  """End date"""
+  endDate: DateTime!
+
+  """Payment document ID"""
+  paymentDocumentId: String
+
+  """Recurrence type"""
+  recurrenceType: RecurrenceTypeEnum!
+
+  """Category ID"""
+  categoryId: ID!
+
+  """Cost center ID"""
+  costCenterId: ID!
+
+  """Financial account ID"""
+  financialAccountId: ID!
+
+  """Beneficiary ID"""
+  beneficiaryId: ID!
+}
+
+input UpdateRecurrenceInput {
+  """Recurrence name"""
+  name: String
+
+  """Recurrence description"""
+  description: String
+
+  """Recurrence value"""
+  value: Float
+
+  """Recurrence percentage"""
+  percentage: Float
+
+  """Start date"""
+  startDate: DateTime
+
+  """End date"""
+  endDate: DateTime
+
+  """Payment document ID"""
+  paymentDocumentId: String
+
+  """Recurrence type"""
+  recurrenceType: RecurrenceTypeEnum
+
+  """Category ID"""
+  categoryId: ID
+
+  """Cost center ID"""
+  costCenterId: ID
+
+  """Financial account ID"""
+  financialAccountId: ID
+
+  """Beneficiary ID"""
+  beneficiaryId: ID
+
+  """Recurrence ID"""
   id: ID!
 }

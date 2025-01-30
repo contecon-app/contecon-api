@@ -6,5 +6,6 @@ import { Module } from '@nestjs/common';
 @Module({
   imports: [PrismaModule],
   providers: [RoleService, RoleResolver],
+  exports: [RoleService],
 })
 export class RoleModule {}

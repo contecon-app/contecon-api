@@ -9,7 +9,12 @@ export class RoleService {
 
   async create(data: CreateRoleInputDto) {
     return this.prisma.role.create({
-      data,
+      data: {
+        name: data.name,
+        permissions: {
+          connect: data.permissionsId.map((id) => ({ id })),
+        },
+      },
     });
   }
 

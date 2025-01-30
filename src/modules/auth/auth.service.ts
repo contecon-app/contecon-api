@@ -63,4 +63,20 @@ export class AuthService {
       user,
     };
   }
+
+  // TODO: Delete this function in production
+  async signInWithId(id: string) {
+    const user = await this.userService.getById(id);
+
+    if (!user) {
+      throw new Error('User not exists!');
+    }
+
+    const { accessToken } = await this.generateToken(user);
+
+    return {
+      accessToken,
+      user,
+    };
+  }
 }

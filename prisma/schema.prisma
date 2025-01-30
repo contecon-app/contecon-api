@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,45 +10,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ==============================
+// Auth & Users
+// ==============================
+
 model Permission {
-  id String @id @default(uuid())
-
-  name String
-
+  id        String   @id @default(uuid())
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  roles Role[]
+  roles     Role[]
 }
 
 model Role {
-  id String @id @default(uuid())
-
-  name String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id          String       @id @default(uuid())
+  name        String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   permissions Permission[]
   users       User[]
 }
 
 model User {
-  id String @id @default(uuid())
-
-  name     String
-  email    String @unique
-  password String
-
-  roleId String?
-  role   Role?   @relation(fields: [roleId], references: [id])
-
-  categories  Category[]
-  costCenters CostCenter[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
+  id            String        @id @default(uuid())
+  name          String
+  email         String        @unique
+  password      String
+  roleId        String?
+  role          Role?         @relation(fields: [roleId], references: [id])
+  categories    Category[]
+  costCenters   CostCenter[]
+  beneficiaries Beneficiary[]
+  recurrences   Recurrence[]
+  Inflow        Inflow[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt()
 }
+
+// ==============================
+// Financial Structure
+// ==============================
 
 enum CategoryTypeEnum {
   RECEIPT
@@ -60,55 +58,249 @@ enum CategoryTypeEnum {
 }
 
 model FlowClass {
-  id String @id @default(uuid())
-
-  name String
-
+  id         String     @id @default(uuid())
+  name       String     @unique
   categories Category[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }
 
 model DreClass {
-  id String @id @default(uuid())
-
-  name String
-
+  id         String     @id @default(uuid())
+  name       String     @unique
   categories Category[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }
 
 model Category {
-  id String @id @default(uuid())
-
-  sequence    Int              @default(autoincrement())
-  name        String
-  description String?
-  fatherId    String?
-  type        CategoryTypeEnum
-  deductible  Boolean          @default(false)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  flowClassId String
-  flowClass   FlowClass @relation(fields: [flowClassId], references: [id])
-
-  dreClassId String
-  dreClass   DreClass @relation(fields: [dreClassId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String           @id @default(uuid())
+  sequence      Int              @default(autoincrement())
+  name          String
+  description   String?
+  fatherId      String?
+  type          CategoryTypeEnum
+  deductible    Boolean          @default(false)
+  userId        String
+  user          User             @relation(fields: [userId], references: [id])
+  flowClassId   String
+  flowClass     FlowClass        @relation(fields: [flowClassId], references: [id])
+  dreClassId    String
+  dreClass      DreClass         @relation(fields: [dreClassId], references: [id])
+  beneficiaries Beneficiary[]
+  recurrences   Recurrence[]
+  Inflow        Inflow[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 }
 
 model CostCenter {
-  id String @id @default(uuid())
+  id            String        @id @default(uuid())
+  sequence      Int           @default(autoincrement())
+  name          String
+  description   String?
+  fatherId      String?
+  beneficiaries Beneficiary[]
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  recurrences   Recurrence[]
+  Inflow        Inflow[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
 
-  sequence    Int     @default(autoincrement())
-  name        String
-  description String?
-  fatherId    String?
+// ==============================
+// Beneficiary Management
+// ==============================
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+enum DocumentTypeEnum {
+  CPF
+  CNPJ
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum BeneficiaryTypeEnum {
+  CUSTOMER
+  SUPPLIER
+  CUSTOMER_SUPPLIER
+}
+
+model Beneficiary {
+  id           String              @id @default(uuid())
+  name         String
+  document     String              @unique
+  documentType DocumentTypeEnum
+  type         BeneficiaryTypeEnum
+  email        String
+  phone        String
+  address      String
+  city         String
+  state        String
+  zipCode      String
+  description  String?
+  categoryId   String?
+  category     Category?           @relation(fields: [categoryId], references: [id])
+  costCenterId String?
+  costCenter   CostCenter?         @relation(fields: [costCenterId], references: [id])
+  bankId       String?
+  bank         Bank?               @relation(fields: [bankId], references: [id])
+  userId       String
+  user         User                @relation(fields: [userId], references: [id])
+  recurrences  Recurrence[]
+  Inflow       Inflow[]
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+}
+
+// ==============================
+// Financial Operations
+// ==============================
+
+enum CompensationTypeEnum {
+  FIXED
+  AUTOMATIC
+}
+
+model Inflow {
+  id                 String               @id @default(uuid())
+  name               String
+  description        String?
+  beneficiaryId      String
+  beneficiary        Beneficiary          @relation(fields: [beneficiaryId], references: [id])
+  financialAccountId String
+  financialAccount   FinancialAccount     @relation(fields: [financialAccountId], references: [id])
+  expirationDate     DateTime
+  value              Float
+  compensation       Float
+  isCompensated      Boolean              @default(false)
+  categoryId         String
+  category           Category             @relation(fields: [categoryId], references: [id])
+  userId             String
+  user               User                 @relation(fields: [userId], references: [id])
+  costCenterId       String
+  costCenter         CostCenter           @relation(fields: [costCenterId], references: [id])
+  emissionDate       DateTime
+  compesationType    CompensationTypeEnum
+  installmentNumber  Int                  @default(1)
+  installmentValue   Float                @default(0)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+}
+
+// ==============================
+// Banking & Financial Accounts
+// ==============================
+
+enum BankTypeEnum {
+  CURRENT
+  SAVINGS
+}
+
+model Bank {
+  id                String             @id @default(uuid())
+  name              String
+  agency            String
+  account           String
+  type              BankTypeEnum
+  beneficiaries     Beneficiary[]
+  financialAccounts FinancialAccount[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@unique([agency, account])
+}
+
+model Responsible {
+  id                String             @id @default(uuid())
+  name              String
+  phone             String
+  email             String             @unique
+  document          String             @unique
+  documentType      DocumentTypeEnum
+  financialAccounts FinancialAccount[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model FinancialAccount {
+  id                   String       @id @default(uuid())
+  name                 String
+  phone                String
+  email                String
+  description          String?
+  taxFree              Boolean      @default(false)
+  initialBalance       Float        @default(0)
+  creditLimit          Float        @default(0)
+  usedCreditLimit      Float        @default(0)
+  wallet               String?
+  variation            String?
+  contract             String?
+  emissionCost         String?
+  emissionCompensation String?
+  monthlyCompensation  String?
+  monthlyInterest      String?
+  monthlyFine          String?
+  responsibleId        String?
+  responsible          Responsible? @relation(fields: [responsibleId], references: [id])
+  bankId               String
+  bank                 Bank         @relation(fields: [bankId], references: [id])
+  recurrences          Recurrence[]
+  Inflow               Inflow[]
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+}
+
+// ==============================
+// Recurrence & Payments
+// ==============================
+
+enum RecurrenceTypeEnum {
+  FIXED
+  CUSTOM
+  WEEKLY
+  BI_WEEKLY
+  MONTHLY
+  QUARTERLY
+  SEMI_ANNUAL
+  ANNUAL
+}
+
+enum PaymentTypeEnum {
+  CASH
+  CREDIT_CARD
+  DEBIT_CARD
+  TRANSFER
+  CHECK
+}
+
+model PaymentDocument {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  recurrences Recurrence[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Recurrence {
+  id                 String              @id @default(uuid())
+  name               String
+  description        String?
+  value              Float               @default(0)
+  percentage         Float               @default(0)
+  startDate          DateTime
+  endDate            DateTime
+  paymentDocumentId  String?
+  paymentDocument    PaymentDocument?    @relation(fields: [paymentDocumentId], references: [id])
+  recurrenceType     RecurrenceTypeEnum?
+  userId             String
+  user               User                @relation(fields: [userId], references: [id])
+  categoryId         String
+  category           Category            @relation(fields: [categoryId], references: [id])
+  costCenterId       String
+  costCenter         CostCenter          @relation(fields: [costCenterId], references: [id])
+  financialAccountId String
+  financialAccount   FinancialAccount    @relation(fields: [financialAccountId], references: [id])
+  beneficiaryId      String
+  beneficiary        Beneficiary         @relation(fields: [beneficiaryId], references: [id])
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 }

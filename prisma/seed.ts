@@ -80,6 +80,29 @@ async function main() {
     ],
   });
 
+  await prisma.paymentDocument.createMany({
+    data: [
+      {
+        name: 'Nota Fiscal',
+      },
+      {
+        name: 'Recibo',
+      },
+      {
+        name: 'Boleto',
+      },
+      {
+        name: 'Fatura',
+      },
+      {
+        name: 'Duplicata',
+      },
+      {
+        name: 'Ordem de Pagamento',
+      },
+    ],
+  });
+
   await prisma.user.create({
     data: {
       name: 'Administrator',
