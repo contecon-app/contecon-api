@@ -7,6 +7,8 @@ import { CurrentUser } from 'src/common/types/current-user.entity';
 import { GetCurrentUser } from 'src/shared/decorators/get-current-user';
 import { AuthGuard } from '../auth/auth.guard';
 import { UseGuards } from '@nestjs/common';
+import { FlowClass } from 'src/common/entities/flow-class.entity';
+import { DreClass } from 'src/common/entities/dre-class.entity';
 
 @Resolver()
 export class CategoryResolver {
@@ -46,5 +48,15 @@ export class CategoryResolver {
   @UseGuards(AuthGuard)
   getMany(@GetCurrentUser() user: CurrentUser) {
     return this.categoryService.getAll(user.userId);
+  }
+
+  @Query(() => [FlowClass], { name: 'getFlowClass' })
+  getFlowClass() {
+    return this.categoryService.getFlowClass();
+  }
+
+  @Query(() => [DreClass], { name: 'getDreClass' })
+  getDreClass() {
+    return this.categoryService.getDreClass();
   }
 }

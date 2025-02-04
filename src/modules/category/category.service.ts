@@ -92,6 +92,9 @@ export class CategoryService {
   async getAll(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
+      include: {
+        categories: true,
+      },
     });
 
     if (!user) {
@@ -100,6 +103,18 @@ export class CategoryService {
 
     return this.prisma.category.findMany({
       where: { userId: user.id },
+      include: {
+        flowClass: true,
+        dreClass: true,
+      },
     });
+  }
+
+  async getFlowClass() {
+    return this.prisma.flowClass.findMany();
+  }
+
+  async getDreClass() {
+    return this.prisma.dreClass.findMany();
   }
 }

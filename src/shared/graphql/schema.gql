@@ -386,6 +386,8 @@ type Query {
   getAllCostCenters: [CostCenter!]!
   getCategoryById(id: String!): Category!
   getAllCategories: [Category!]!
+  getFlowClass: [FlowClass!]!
+  getDreClass: [DreClass!]!
   getPermissionById(id: String!): Permission!
   getAllPermissions: [Permission!]!
   getAllRoles: [Role!]!
@@ -686,15 +688,6 @@ input CreateBeneficiaryInput {
 
   """Beneficiary description"""
   description: String
-
-  """Beneficiary category id"""
-  categoryId: ID
-
-  """Beneficiary cost center id"""
-  costCenterId: ID
-
-  """Beneficiary bank id"""
-  bankId: ID
 }
 
 input UpdateBeneficiaryInput {
@@ -730,15 +723,6 @@ input UpdateBeneficiaryInput {
 
   """Beneficiary description"""
   description: String
-
-  """Beneficiary category id"""
-  categoryId: ID
-
-  """Beneficiary cost center id"""
-  costCenterId: ID
-
-  """Beneficiary bank id"""
-  bankId: ID
 
   """ID of the Beneficiary"""
   id: ID!

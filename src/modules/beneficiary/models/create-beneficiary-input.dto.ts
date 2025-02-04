@@ -1,4 +1,4 @@
-import { Field, ID, InputType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { BeneficiaryTypeEnum, DocumentTypeEnum } from '@prisma/client';
 
 @InputType()
@@ -38,22 +38,4 @@ export class CreateBeneficiaryInput {
     nullable: true,
   })
   description?: string;
-
-  @Field(() => ID, {
-    description: 'Beneficiary category id',
-    nullable: true,
-  })
-  categoryId?: string;
-
-  @Field(() => ID, {
-    description: 'Beneficiary cost center id',
-    nullable: true,
-  })
-  costCenterId?: string;
-
-  @Field(() => ID, {
-    description: 'Beneficiary bank id',
-    nullable: true,
-  })
-  bankId?: string;
 }

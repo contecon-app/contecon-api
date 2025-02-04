@@ -8,7 +8,7 @@ export class BeneficiaryService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(userId: string, data: CreateBeneficiaryInput) {
-    const { categoryId, costCenterId, bankId, ...rest } = data;
+    const { ...rest } = data;
 
     return this.prisma.beneficiary.create({
       data: {
@@ -16,21 +16,6 @@ export class BeneficiaryService {
         user: {
           connect: {
             id: userId,
-          },
-        },
-        category: {
-          connect: {
-            id: categoryId,
-          },
-        },
-        costCenter: {
-          connect: {
-            id: costCenterId,
-          },
-        },
-        bank: {
-          connect: {
-            id: bankId,
           },
         },
       },
